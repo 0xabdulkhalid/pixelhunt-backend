@@ -17,7 +17,9 @@ app.use("/leaderboard", leaderboard);
 
 // Error handlers
 app.use((req, res, next) => {
-  next(createError(404));
+  const error = new Error("Not Found");
+  error.status = 404;
+  next(error);
 });
 
 app.use((err, req, res, next) => {
