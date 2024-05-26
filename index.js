@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const leaderboard = require("./routes/leaderboard");
 const app = express();
 
 const mongoDB = process.env.MONGO_URI;
@@ -11,6 +12,8 @@ db.on("error", console.error.bind(console, "mongo connection error"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use("/leaderboard", leaderboard);
 
 // Error handlers
 app.use((req, res, next) => {
