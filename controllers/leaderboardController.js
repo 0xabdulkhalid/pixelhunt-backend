@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Leaderboard = require("../models/leaderboard");
 
 exports.add_score = asyncHandler(async (req, res, next) => {
-  const gameId = req.params.gameId;
+  const gameId = req.query.gameId;
   const { username, duration } = req.body;
 
   if (!gameId) {
@@ -46,16 +46,17 @@ exports.add_score = asyncHandler(async (req, res, next) => {
 });
 
 exports.get_scores = asyncHandler(async (req, res, next) => {
-  if (!req.params.gameId) {
+  const id = req.query.gameId;
+  if (!id) {
     return res.status(403).json({
       message: "Game ID is required to view scores",
     });
   }
 
-  const scores = await Leaderboard.find()
+  const scores = await Leaderboard.find({ gameId: id })
     .select("username createdAt time")
     .sort({ time: 1 })
     .exec();
 
-  return res.status(200).json(scores);
+  return res.status(200).json({ success: Boolean(scores.length), scores });
 });
