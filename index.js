@@ -1,8 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const cors = require("cors");
 const leaderboard = require("./routes/leaderboard");
 const app = express();
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    methods: "GET,POST",
+  })
+);
 
 const mongoDB = process.env.MONGO_URI;
 mongoose.set("strictQuery", false);
